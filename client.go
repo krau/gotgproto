@@ -83,6 +83,7 @@ type Client struct {
 	NoUpdates bool
 
 	authConversator AuthConversator
+	sendCodeOptions auth.SendCodeOptions
 	clientType      clientType
 	ctx             context.Context
 	err             error
@@ -176,6 +177,8 @@ type ClientOpts struct {
 	NoAutoAuth bool
 	// NoUpdates is a flag to disable updates.
 	NoUpdates bool
+	// SendCodeOptions allows overriding AuthSendCode behavior.
+	SendCodeOptions *auth.SendCodeOptions
 }
 
 // NewClient creates a new gotgproto client and logs in to telegram.
@@ -234,7 +237,9 @@ func NewClient(appId int, apiHash string, cType clientType, opts *ClientOpts) (*
 		appId:             appId,
 		apiHash:           apiHash,
 	}
-
+	if opts.SendCodeOptions != nil {
+		c.sendCodeOptions = *opts.SendCodeOptions
+	}
 	c.printCredit()
 
 	return &c, c.Start(opts)
@@ -292,7 +297,7 @@ func (c *Client) login() error {
 			c.ctx, authClient,
 			c.authConversator,
 			c.clientType.getValue(),
-			auth.SendCodeOptions{},
+			c.sendCodeOptions,
 		)
 		if err != nil {
 			return errors.Wrap(err, "auth flow")
