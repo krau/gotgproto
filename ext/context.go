@@ -84,7 +84,7 @@ func ReplyTextString(s string) ReplyTextType {
 
 type ReplyTextTypeStyledText styling.StyledTextOption
 
-func (*ReplyTextTypeStyledText) construct() {}
+func (ReplyTextTypeStyledText) construct() {}
 
 func (r ReplyTextTypeStyledText) get() styling.StyledTextOption {
 	return styling.StyledTextOption(r)
@@ -97,7 +97,7 @@ func ReplyTextStyledText(s styling.StyledTextOption) ReplyTextType {
 
 type ReplyTextTypeStyledTextArray []styling.StyledTextOption
 
-func (*ReplyTextTypeStyledTextArray) construct() {}
+func (ReplyTextTypeStyledTextArray) construct() {}
 
 func (r ReplyTextTypeStyledTextArray) get() []styling.StyledTextOption {
 	return []styling.StyledTextOption(r)
